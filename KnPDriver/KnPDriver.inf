@@ -1,0 +1,77 @@
+;
+; KnPDriver.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=KnPDriver.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+KnPDriver_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+KnPDriver.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%KnPDriver.DeviceDesc%=KnPDriver_Device, Root\KnPDriver ; TODO: edit hw-id
+
+[KnPDriver_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+KnPDriver.sys
+
+;-------------- Service installation
+[KnPDriver_Device.NT.Services]
+AddService = KnPDriver,%SPSVCINST_ASSOCSERVICE%, KnPDriver_Service_Inst
+
+; -------------- KnPDriver driver install sections
+[KnPDriver_Service_Inst]
+DisplayName    = %KnPDriver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\KnPDriver.sys
+
+;
+;--- KnPDriver_Device Coinstaller installation ------
+;
+
+[KnPDriver_Device.NT.CoInstallers]
+AddReg=KnPDriver_Device_CoInstaller_AddReg
+CopyFiles=KnPDriver_Device_CoInstaller_CopyFiles
+
+[KnPDriver_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[KnPDriver_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[KnPDriver_Device.NT.Wdf]
+KmdfService =  KnPDriver, KnPDriver_wdfsect
+[KnPDriver_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "KnPDriver Installation Disk"
+KnPDriver.DeviceDesc = "KnPDriver Device"
+KnPDriver.SVCDESC = "KnPDriver Service"
