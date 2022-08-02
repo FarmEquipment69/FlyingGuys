@@ -52,7 +52,7 @@ void Overlay::RenderMenu()
 	ImGui::SetNextWindowSize(ImVec2(490, 215));
 	ImGui::GetStyle().WindowRounding = 7.0f;
 
-	ImGui::Begin(XorStr("FlyingGuys v1"), (bool*)true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
+	ImGui::Begin(XorStr("FlyingGuys"), (bool*)true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
 
 	ImGui::Text(XorStr("Max Speed Multiplier"));
 	ImGui::SliderFloat(XorStr("##1"), &maxspeed_multiplier, 100.0f, 800.0f, "%.2f%%");
@@ -81,7 +81,7 @@ void Overlay::RenderInfo()
 
 	ImGui::Begin(XorStr("##info"), (bool*)true, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar);
 	ImGui::PushFont(font2);
-	ImGui::TextColored(WHITE, "FlyingGuys v1 / Max Speed Multiplier: %.2f%% / Gravity Multiplier: %.2f%%", maxspeed_multiplier, gravity_multiplier);
+	ImGui::TextColored(WHITE, "FlyingGuys / Max Speed Multiplier: %.2f%% / Gravity Multiplier: %.2f%%", maxspeed_multiplier, gravity_multiplier);
 	ImGui::PopFont();
 
 	ImGui::End();

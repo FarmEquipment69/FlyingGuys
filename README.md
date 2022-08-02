@@ -1,4 +1,4 @@
-# FlyingGuys v1
+# FlyingGuys
 External cheat for Fall Guys
 - Modify Max Speed/Speed Hack
 - Modify Gravity
@@ -27,8 +27,10 @@ End = Decrease Max Speed
 
 PageUp = Increase Gravity
 PageDown = Decrease Gravity
+```
 
 ## Credits
 - KnPCore - https://github.com/da772/KnP/
 - KDMapper - https://github.com/TheCruZ/kdmapper
 - zLib - https://zlib.net/
+- ImGui - https://github.com/ocornut/imgui
