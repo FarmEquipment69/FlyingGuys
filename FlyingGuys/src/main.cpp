@@ -95,6 +95,20 @@ int main()
 
 	KnP::memory::ModuleInfo fg_client = KnP::hook::memory::get_module_information("FallGuys_client_game.exe", pID);
 
+	// Secondary driver loading method for some builds of windows that do not work with main method
+	if (!fg_client.base)
+	{
+		system("kdmapper.exe KnPDriver.sys");
+		fg_client = KnP::hook::memory::get_module_information("FallGuys_client_game.exe", pID);
+	
+		if (!fg_client.base)
+		{
+			std::cout << std::endl << "ERROR: Failed to load driver, Make sure Windows Defender/Anti-Virus applictions are disabled and try again\n\n";
+			system("pause");
+			return -1;
+		}
+	}
+
 	std::cout << std::endl << "Fall Guys process found! PID: " << pID << std::endl;
 	printf("[*] FallGuys_client_game.exe @ %p (%i bytes)\n", fg_client.base, fg_client.size);
 
