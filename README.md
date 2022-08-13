@@ -30,10 +30,8 @@ PageDown = Decrease Gravity
 ```
 
 ## Known Bugs/Issues
-```
 - Windows 11 Insider builds are not currently working due to an issue with the vulnerable Intel driver KDMapper uses being revoked in the newest Windows 11 Insider builds.
 - If you are receiving the error "VCRUNTIME140.dll and MSVCP140.dll is missing or similar" please install Visual C++ Redistributable - https://aka.ms/vs/17/release/vc_redist.x64.exe
-```
 
 ## Credits
 - KnPCore - https://github.com/da772/KnP/
