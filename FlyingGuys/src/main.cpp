@@ -120,7 +120,7 @@ int main()
 
 	uint64_t baseAddr = gameassembly_dll.base;
 
-	uint64_t GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(baseAddr + 0x42498C0, pID);
+	uint64_t GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(baseAddr + 0x4595B40, pID);
 	GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(GlobalGameStateClient + 0xB8, pID);
 	GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(GlobalGameStateClient + 0x00, pID);
 	
