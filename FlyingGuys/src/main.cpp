@@ -36,7 +36,7 @@ void DebugPrint(const char* fmt, ...)
 
 	va_list args;
 	va_start(args, fmt);
-	printf(fmt,args);
+	printf(fmt, args);
 	va_end(args);
 }
 
@@ -72,11 +72,11 @@ int main()
 
 	unsigned char first[] = { 0x49, 0xBA }; // mov r10
 	unsigned char last[] = { 0x90, 0x90, 0x41, 0xFF, 0xE2 }; // nop nop jmp r10
-	
+
 	bool mod = KnP::data::modify_driver_bytecode(&driver, first, sizeof(first), last, sizeof(last)) &&
 		KnP::data::modify_driver_module_name(&driver, "NtDxgkGetTrackedWorkloadStatistics") &&
 		KnP::data::modify_driver_module_location(&driver, "\\SystemRoot\\System32\\drivers\\dxgkrnl.sys");
-	
+
 	if (!mod)
 	{
 		return -1;
@@ -91,7 +91,7 @@ int main()
 		std::cout << "ERROR: Cannot find process FallGuys_client_game.exe\n\n";
 		system("pause");
 		return -1;
-	} 
+	}
 
 	KnP::memory::ModuleInfo fg_client = KnP::hook::memory::get_module_information("FallGuys_client_game.exe", pID);
 
@@ -100,7 +100,7 @@ int main()
 	{
 		system("kdmapper.exe KnPDriver.sys");
 		fg_client = KnP::hook::memory::get_module_information("FallGuys_client_game.exe", pID);
-	
+
 		if (!fg_client.base)
 		{
 			std::cout << std::endl << "ERROR: Failed to load driver, Make sure Windows Defender/Anti-Virus applictions are disabled and try again\n\n";
@@ -120,10 +120,10 @@ int main()
 
 	uint64_t baseAddr = gameassembly_dll.base;
 
-	uint64_t GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(baseAddr + 0x4595B40, pID);
+	uint64_t GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(baseAddr + 0x4C5B0A0, pID);
 	GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(GlobalGameStateClient + 0xB8, pID);
 	GlobalGameStateClient = KnP::hook::memory::read_memory<uint64_t>(GlobalGameStateClient + 0x00, pID);
-	
+
 	float NetworkMetricsLoggingPeriod = KnP::hook::memory::read_memory<float>(GlobalGameStateClient + 0x30, pID);
 	float CpuMetricsLoggingPeriod = KnP::hook::memory::read_memory<float>(GlobalGameStateClient + 0x34, pID);
 
@@ -151,7 +151,7 @@ int main()
 		}
 
 		uint64_t Players = KnP::hook::memory::read_memory<uint64_t>(ClientPlayerManager + 0x10, pID);
-		DebugPrint("Players = %p\n",Players);
+		DebugPrint("Players = %p\n", Players);
 
 		uint64_t PlayerList = KnP::hook::memory::read_memory<uint64_t>(Players + 0x10, pID);
 		DebugPrint("ParticipantPlayersCount: %i - PlayerList: %p\n", ParticipantPlayersCount, PlayerList);
@@ -161,9 +161,9 @@ int main()
 		for (int i = 0; i <= ParticipantPlayersCount; i++)
 		{
 			uint64_t Player = KnP::hook::memory::read_memory<uint64_t>(PlayerList + 0x20 + (i * 0x8), pID);
-			
+
 			bool isLocalPlayer = KnP::hook::memory::read_memory<bool>(Player + 0x60, pID);
-			
+
 			if (isLocalPlayer)
 			{
 				LocalFallGuysCharacterController = KnP::hook::memory::read_memory<uint64_t>(Player + 0x58, pID);
@@ -179,12 +179,12 @@ int main()
 
 		DebugPrint("LocalFallGuysCharacterController: %p\n", LocalFallGuysCharacterController);
 
-		float GravityModifier = KnP::hook::memory::read_memory<float>(LocalFallGuysCharacterController + 0x2cc, pID);
+		float GravityModifier = KnP::hook::memory::read_memory<float>(LocalFallGuysCharacterController + 0x2ec, pID);
 		DebugPrint("GravityModifier: %f\n", GravityModifier);
 
 		uint64_t LocalFallGuysCharacterControllerData = KnP::hook::memory::read_memory<uint64_t>(LocalFallGuysCharacterController + 0xa0, pID);
-		DebugPrint("LocalFallGuysCharacterControllerData: % p\n",LocalFallGuysCharacterControllerData);
-		
+		DebugPrint("LocalFallGuysCharacterControllerData: % p\n", LocalFallGuysCharacterControllerData);
+
 		float normalMaxSpeed = KnP::hook::memory::read_memory<float>(LocalFallGuysCharacterControllerData + 0x18, pID);
 
 		if (DEBUG)
@@ -198,10 +198,10 @@ int main()
 			DebugPrint("normalMaxSpeed: %f - getUpMaxSpeed: %f - carryMaxSpeed %f - gravityScale: %f - minStunTime: %f - maxGroundedStunTime: %f\n", normalMaxSpeed, getUpMaxSpeed, carryMaxSpeed, gravityScale, minStunTime, maxGroundedStunTime);
 		}
 
-		uint64_t LocalMotorFunctionMovement = KnP::hook::memory::read_memory<uint64_t>(LocalFallGuysCharacterController + 0x2c0, pID);
+		uint64_t LocalMotorFunctionMovement = KnP::hook::memory::read_memory<uint64_t>(LocalFallGuysCharacterController + 0x2e0, pID);
 		DebugPrint("LocalMotorFunctionMovement: %p\n", LocalMotorFunctionMovement);
 
-		uint64_t currentMovementSpeedModifier = KnP::hook::memory::read_memory<uint64_t>(LocalMotorFunctionMovement + 0xa8, pID);
+		uint64_t currentMovementSpeedModifier = KnP::hook::memory::read_memory<uint64_t>(LocalMotorFunctionMovement + 0xb8, pID);
 		DebugPrint("currentMovementSpeedModifier: %p\n", currentMovementSpeedModifier);
 
 		float MaxSpeedMultiplier = KnP::hook::memory::read_memory<float>(currentMovementSpeedModifier + 0x10, pID);
@@ -215,11 +215,11 @@ int main()
 			continue;
 		}
 
-		if (GravityModifier != (gravity_multiplier/100))
-			KnP::hook::memory::write_memory<float>(LocalFallGuysCharacterController + 0x2cc, (gravity_multiplier/100), pID); // Gravity
+		if (GravityModifier != (gravity_multiplier / 100))
+			KnP::hook::memory::write_memory<float>(LocalFallGuysCharacterController + 0x2ec, (gravity_multiplier / 100), pID); // Gravity
 
-		if (MaxSpeedMultiplier != (maxspeed_multiplier/100))
-			KnP::hook::memory::write_memory<float>(currentMovementSpeedModifier + 0x10, (maxspeed_multiplier/100), pID); // Max Speed
+		if (MaxSpeedMultiplier != (maxspeed_multiplier / 100))
+			KnP::hook::memory::write_memory<float>(currentMovementSpeedModifier + 0x10, (maxspeed_multiplier / 100), pID); // Max Speed
 
 		if (no_collision)
 		{
